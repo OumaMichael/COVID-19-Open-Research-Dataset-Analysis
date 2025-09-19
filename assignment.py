@@ -13,9 +13,9 @@ import os
 import sys
 import string
 import warnings
+import yaml
 from collections import Counter
 
-import mlcroissant as mlc
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,23 +26,22 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 sns.set(style="whitegrid", palette="muted")
 
 # ---------- CONFIG ----------
-OUTPUT_DIR = "cord19_outputs"
-SAMPLE_CLEANED_CSV = os.path.join(OUTPUT_DIR, "metadata_clean_sample.csv")
+# Load configuration from config.yaml
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+OUTPUT_DIR = config.get("output", {}).get("dir", "cord19_outputs")
+CSV_PATH = config.get("data", {}).get("csv_path", "metadata.csv/metadata.csv")
+SAMPLE_CLEANED_CSV = config.get("data", {}).get("sample_cleaned_csv", os.path.join(OUTPUT_DIR, "metadata_clean_sample.csv"))
+
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-
-# Fetch the Croissant JSON-LD dataset using mlcroissant
-croissant_dataset = mlc.Dataset('https://www.kaggle.com/datasets/allen-institute-for-ai/CORD-19-research-challenge/croissant/download')
-
-# Check what record sets are in the dataset
-record_sets = croissant_dataset.metadata.record_sets
-print("Record sets available in the dataset:")
-print(record_sets)
-
-# Fetch the records and put them in a DataFrame
+# Load the local CSV file
 def fetch_croissant_data():
-    record_set_df = pd.DataFrame(croissant_dataset.records(record_set=record_sets[0].uuid))
-    return record_set_df
+    print(f"Loading data from local CSV: {CSV_PATH}")
+    df = pd.read_csv(CSV_PATH)
+    print(f"Loaded {len(df)} rows from CSV")
+    return df
 
 
 def initial_exploration(df):

@@ -1,0 +1,39 @@
+# Configuration file for CORD-19 Analysis Script
+
+# Data paths
+data:
+  csv_path: "metadata.csv/metadata.csv"
+  sample_cleaned_csv: "cord19_outputs/metadata_clean_sample.csv"
+
+# Output settings
+output:
+  dir: "cord19_outputs"
+
+# Analysis parameters
+analysis:
+  top_journals: 10
+  title_word_frequency_top_n: 30
+  sample_size: 200000
+  year_range:
+    min: 1900
+    max: 2025
+  abstract_length_limit: 5000
+
+# Plot settings
+plots:
+  dpi: 150
+  figsize:
+    missing_percent: [12, 6]
+    boxplot: [10, 4]
+    correlation_heatmap: [10, 6]
+    top_journals: [10, 6]
+    publications_by_year: [10, 5]
+    abstract_length_hist: [10, 5]
+    top_sources: [12, 6]
+    license_pie: [8, 8]
+    title_words: [12, 6]
+
+# Seaborn style
+seaborn:
+  style: "whitegrid"
+  palette: "muted"
